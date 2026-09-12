@@ -1,0 +1,2560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Connexion — BMJ VOICE AI</title>
+
+    <meta
+        name="description"
+        content="Connectez-vous à votre compte BMJ VOICE AI."
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+
+            --primary: #145a86;
+            --primary-dark: #0b3d5c;
+            --primary-light: #eaf5fb;
+
+            --gold: #d4af37;
+            --gold-light: #f8edc7;
+
+            --dark: #0b1724;
+            --text: #263746;
+            --muted: #71808d;
+
+            --white: #ffffff;
+            --bg: #f4f8fb;
+            --border: #dfe8ee;
+
+            --success: #16834b;
+            --danger: #c93636;
+
+            --shadow:
+                0 25px 70px
+                rgba(11, 61, 92, 0.13);
+
+        }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+
+            margin: 0;
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+        html {
+
+            scroll-behavior: smooth;
+
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "Inter",
+                sans-serif;
+
+            color:
+                var(--text);
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(20, 90, 134, .10),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(212, 175, 55, .12),
+                    transparent 28%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #f7fafc,
+                    #edf5f9
+                );
+
+            overflow-x: hidden;
+
+        }
+
+
+        button,
+        input {
+
+            font-family:
+                inherit;
+
+        }
+
+
+        button {
+
+            cursor: pointer;
+
+        }
+
+
+        a {
+
+            text-decoration: none;
+
+        }
+
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+
+            min-height: 100vh;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(430px, 500px);
+
+            gap: 35px;
+
+            align-items: center;
+
+            width:
+                min(1400px, 100%);
+
+            margin: auto;
+
+            padding: 30px;
+
+        }
+
+
+        /* =========================================================
+           PRESENTATION
+        ========================================================= */
+
+        .presentation {
+
+            position: relative;
+
+            min-height: 650px;
+
+            overflow: hidden;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            padding: 65px;
+
+            border-radius: 32px;
+
+            color: white;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #0b3d5c,
+                    #145a86
+                );
+
+            box-shadow:
+
+                0 30px 80px
+                rgba(11, 61, 92, .22);
+
+        }
+
+
+        .presentation::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            border-radius: 50%;
+
+            right: -180px;
+            top: -180px;
+
+            background:
+                rgba(255,255,255,.07);
+
+        }
+
+
+        .presentation::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 320px;
+            height: 320px;
+
+            border-radius: 50%;
+
+            left: -170px;
+            bottom: -180px;
+
+            background:
+                rgba(212,175,55,.10);
+
+        }
+
+
+        /* =========================================================
+           BRAND
+        ========================================================= */
+
+        .brand {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            width: fit-content;
+
+            color: white;
+
+            font-family:
+                "Poppins",
+                sans-serif;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            margin-bottom: 70px;
+
+        }
+
+
+        .brand-icon {
+
+            width: 46px;
+            height: 46px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,.12);
+
+            border:
+                1px solid
+                rgba(255,255,255,.15);
+
+        }
+
+
+        .brand span {
+
+            color:
+                var(--gold);
+
+        }
+
+
+        /* =========================================================
+           PRESENTATION CONTENT
+        ========================================================= */
+
+        .presentation-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 650px;
+
+        }
+
+
+        .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 8px 13px;
+
+            border-radius: 50px;
+
+            background:
+                rgba(255,255,255,.10);
+
+            border:
+                1px solid
+                rgba(255,255,255,.14);
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .eyebrow i {
+
+            color:
+                var(--gold);
+
+        }
+
+
+        .presentation h1 {
+
+            font-family:
+                "Poppins",
+                sans-serif;
+
+            font-size:
+                clamp(35px, 4.5vw, 57px);
+
+            line-height:
+                1.1;
+
+            letter-spacing:
+                -1.5px;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .presentation h1 span {
+
+            color:
+                var(--gold);
+
+        }
+
+
+        .presentation-description {
+
+            max-width: 570px;
+
+            color:
+                rgba(255,255,255,.72);
+
+            font-size: 15px;
+
+            line-height: 1.8;
+
+            margin-bottom: 40px;
+
+        }
+
+
+        /* =========================================================
+           MINI STATS
+        ========================================================= */
+
+        .mini-stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+        }
+
+
+        .mini-stat {
+
+            padding: 17px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+        }
+
+
+        .mini-stat strong {
+
+            display: block;
+
+            font-family:
+                "Poppins",
+                sans-serif;
+
+            font-size: 19px;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .mini-stat span {
+
+            color:
+                rgba(255,255,255,.62);
+
+            font-size: 10px;
+
+            line-height: 1.4;
+
+        }
+
+
+        /* =========================================================
+           FORM AREA
+        ========================================================= */
+
+        .form-area {
+
+            width: 100%;
+
+        }
+
+
+        .form-card {
+
+            background:
+                white;
+
+            border:
+                1px solid
+                rgba(20,90,134,.08);
+
+            border-radius: 27px;
+
+            padding: 40px;
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        /* =========================================================
+           FORM HEADER
+        ========================================================= */
+
+        .form-header {
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .form-header h2 {
+
+            font-family:
+                "Poppins",
+                sans-serif;
+
+            color:
+                var(--dark);
+
+            font-size: 29px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .form-header p {
+
+            color:
+                var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =========================================================
+           MESSAGE
+        ========================================================= */
+
+        .form-message {
+
+            display: none;
+
+            align-items:
+                flex-start;
+
+            gap: 10px;
+
+            padding: 13px;
+
+            margin-bottom: 18px;
+
+            border-radius: 11px;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .form-message.show {
+
+            display: flex;
+
+        }
+
+
+        .form-message.success {
+
+            color:
+                #12683d;
+
+            background:
+                #edf9f3;
+
+            border:
+                1px solid
+                #c8ecd8;
+
+        }
+
+
+        .form-message.error {
+
+            color:
+                #a72e2e;
+
+            background:
+                #fff2f2;
+
+            border:
+                1px solid
+                #f2cccc;
+
+        }
+
+
+        .form-message.info {
+
+            color:
+                #145a86;
+
+            background:
+                #eef7fc;
+
+            border:
+                1px solid
+                #d0e7f4;
+
+        }
+
+
+        /* =========================================================
+           FORM GROUP
+        ========================================================= */
+
+        .form-group {
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            color:
+                var(--dark);
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 15px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color:
+                #8997a1;
+
+            font-size: 14px;
+
+            pointer-events: none;
+
+        }
+
+
+        .form-input {
+
+            width: 100%;
+
+            height: 51px;
+
+            padding:
+                0 45px 0 43px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background:
+                #fbfdff;
+
+            color:
+                var(--dark);
+
+            font-size: 13px;
+
+            transition: .2s;
+
+        }
+
+
+        .form-input:focus {
+
+            border-color:
+                var(--primary);
+
+            background:
+                white;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(20,90,134,.06);
+
+        }
+
+
+        .form-input.input-error {
+
+            border-color:
+                var(--danger);
+
+            background:
+                #fffafa;
+
+        }
+
+
+        /* =========================================================
+           PASSWORD BUTTON
+        ========================================================= */
+
+        .password-toggle {
+
+            position: absolute;
+
+            right: 12px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border: none;
+
+            background:
+                transparent;
+
+            color:
+                #8997a1;
+
+            font-size: 14px;
+
+        }
+
+
+        .password-toggle:hover {
+
+            color:
+                var(--primary);
+
+        }
+
+
+        /* =========================================================
+           OPTIONS
+        ========================================================= */
+
+        .options {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 15px;
+
+            margin:
+                5px 0 22px;
+
+        }
+
+
+        .remember {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+
+        .remember input {
+
+            width: 16px;
+            height: 16px;
+
+            accent-color:
+                var(--primary);
+
+        }
+
+
+        .remember label {
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+        }
+
+
+        .forgot-password {
+
+            color:
+                var(--primary);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .forgot-password:hover {
+
+            text-decoration:
+                underline;
+
+        }
+
+
+        /* =========================================================
+           LOGIN BUTTON
+        ========================================================= */
+
+        .login-btn {
+
+            width: 100%;
+
+            min-height: 53px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            color:
+                white;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            box-shadow:
+
+                0 12px 28px
+                rgba(20,90,134,.20);
+
+            transition: .2s;
+
+        }
+
+
+        .login-btn:hover:not(:disabled) {
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+
+                0 16px 34px
+                rgba(20,90,134,.25);
+
+        }
+
+
+        .login-btn:disabled {
+
+            opacity:
+                .65;
+
+            cursor:
+                not-allowed;
+
+            box-shadow:
+                none;
+
+        }
+
+
+        /* =========================================================
+           DIVIDER
+        ========================================================= */
+
+        .divider {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin:
+                24px 0;
+
+        }
+
+
+        .divider::before,
+        .divider::after {
+
+            content: "";
+
+            height: 1px;
+
+            flex: 1;
+
+            background:
+                var(--border);
+
+        }
+
+
+        .divider span {
+
+            color:
+                #9aa5ad;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =========================================================
+           REGISTER
+        ========================================================= */
+
+        .register-box {
+
+            text-align:
+                center;
+
+            padding:
+                17px;
+
+            border-radius:
+                13px;
+
+            background:
+                var(--primary-light);
+
+            border:
+                1px solid
+                rgba(20,90,134,.08);
+
+        }
+
+
+        .register-box p {
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .register-box a {
+
+            color:
+                var(--primary);
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+        }
+
+
+        /* =========================================================
+           BACK HOME
+        ========================================================= */
+
+        .back-home {
+
+            display: flex;
+
+            justify-content:
+                center;
+
+            margin-top: 20px;
+
+        }
+
+
+        .back-home a {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            transition: .2s;
+
+        }
+
+
+        .back-home a:hover {
+
+            color:
+                var(--primary);
+
+        }
+
+
+        /* =========================================================
+           SPINNER
+        ========================================================= */
+
+        .spinner {
+
+            width: 17px;
+
+            height: 17px;
+
+            border-radius: 50%;
+
+            border:
+                2px solid
+                rgba(255,255,255,.35);
+
+            border-top-color:
+                white;
+
+            animation:
+                spin .7s linear infinite;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
+            }
+
+        }
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .toast {
+
+            position: fixed;
+
+            z-index: 5000;
+
+            right: 20px;
+
+            bottom: 20px;
+
+            max-width: 360px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 14px 17px;
+
+            border-radius: 13px;
+
+            background:
+                #10202c;
+
+            color:
+                white;
+
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,.22);
+
+            font-size: 12px;
+
+            transform:
+                translateY(25px);
+
+            opacity: 0;
+
+            pointer-events:
+                none;
+
+            transition: .3s;
+
+        }
+
+
+        .toast.show {
+
+            transform:
+                translateY(0);
+
+            opacity: 1;
+
+        }
+
+
+        .toast.success i {
+
+            color:
+                #58d995;
+
+        }
+
+
+        .toast.error i {
+
+            color:
+                #ff7272;
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1050px) {
+
+            .page {
+
+                grid-template-columns:
+                    1fr;
+
+                width:
+                    min(650px, 100%);
+
+                padding: 20px;
+
+            }
+
+
+            .presentation {
+
+                min-height:
+                    auto;
+
+                padding:
+                    45px;
+
+                border-radius:
+                    25px;
+
+            }
+
+
+            .brand {
+
+                margin-bottom:
+                    45px;
+
+            }
+
+
+            .presentation h1 {
+
+                font-size:
+                    43px;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .page {
+
+                padding:
+                    12px;
+
+            }
+
+
+            .presentation {
+
+                padding:
+                    32px 24px;
+
+                border-radius:
+                    21px;
+
+            }
+
+
+            .brand {
+
+                margin-bottom:
+                    35px;
+
+                font-size:
+                    18px;
+
+            }
+
+
+            .brand-icon {
+
+                width: 40px;
+                height: 40px;
+
+            }
+
+
+            .presentation h1 {
+
+                font-size:
+                    35px;
+
+            }
+
+
+            .presentation-description {
+
+                font-size:
+                    13px;
+
+            }
+
+
+            .mini-stats {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .form-card {
+
+                padding:
+                    26px 18px;
+
+                border-radius:
+                    21px;
+
+            }
+
+
+            .form-header h2 {
+
+                font-size:
+                    24px;
+
+            }
+
+
+            .options {
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .toast {
+
+                left: 12px;
+
+                right: 12px;
+
+                bottom: 12px;
+
+                max-width:
+                    none;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- =====================================================
+         PRESENTATION
+    ====================================================== -->
+
+    <section class="presentation">
+
+
+        <a
+            href="index.html"
+            class="brand"
+        >
+
+            <div class="brand-icon">
+
+                <i class="fa-solid fa-microphone-lines"></i>
+
+            </div>
+
+            BMJ <span>VOICE AI</span>
+
+        </a>
+
+
+        <div class="presentation-content">
+
+
+            <div class="eyebrow">
+
+                <i class="fa-solid fa-lock"></i>
+
+                Espace sécurisé
+
+            </div>
+
+
+            <h1>
+
+                Bienvenue
+                <span>sur BMJ VOICE AI.</span>
+
+            </h1>
+
+
+            <p class="presentation-description">
+
+                Connectez-vous à votre espace personnel pour
+                transformer vos textes en voix naturelles,
+                retrouver vos générations et gérer vos projets audio.
+
+            </p>
+
+
+            <div class="mini-stats">
+
+
+                <div class="mini-stat">
+
+                    <strong>
+                        IA
+                    </strong>
+
+                    <span>
+                        Synthèse vocale intelligente
+                    </span>
+
+                </div>
+
+
+                <div class="mini-stat">
+
+                    <strong>
+                        MP3
+                    </strong>
+
+                    <span>
+                        Audio prêt à écouter
+                    </span>
+
+                </div>
+
+
+                <div class="mini-stat">
+
+                    <strong>
+                        24/7
+                    </strong>
+
+                    <span>
+                        Votre espace accessible
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FORMULAIRE
+    ====================================================== -->
+
+    <main class="form-area">
+
+
+        <div class="form-card">
+
+
+            <div class="form-header">
+
+                <h2>
+                    Se connecter
+                </h2>
+
+                <p>
+                    Entrez vos identifiants pour accéder
+                    à votre compte BMJ VOICE AI.
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                class="form-message"
+                id="formMessage"
+            >
+
+                <i
+                    id="messageIcon"
+                    class="fa-solid fa-circle-info"
+                ></i>
+
+                <span
+                    id="messageText"
+                ></span>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form
+                id="loginForm"
+                novalidate
+            >
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+
+                        Adresse e-mail
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i
+                            class="fa-regular fa-envelope input-icon"
+                        ></i>
+
+
+                        <input
+                            type="email"
+                            id="email"
+                            class="form-input"
+                            placeholder="exemple@email.com"
+                            autocomplete="email"
+                            maxlength="150"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+
+                        Mot de passe
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i
+                            class="fa-solid fa-lock input-icon"
+                        ></i>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            class="form-input"
+                            placeholder="Votre mot de passe"
+                            autocomplete="current-password"
+                            maxlength="100"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="passwordToggle"
+                            aria-label="Afficher le mot de passe"
+                        >
+
+                            <i
+                                class="fa-regular fa-eye"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- OPTIONS -->
+
+                <div class="options">
+
+
+                    <div class="remember">
+
+                        <input
+                            type="checkbox"
+                            id="remember"
+                        >
+
+                        <label for="remember">
+
+                            Se souvenir de moi
+
+                        </label>
+
+                    </div>
+
+
+                    <a
+                        href="mot-de-passe-oublie.html"
+                        class="forgot-password"
+                    >
+
+                        Mot de passe oublié ?
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginBtn"
+                >
+
+                    <i
+                        class="fa-solid fa-right-to-bracket"
+                    ></i>
+
+                    Se connecter
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- DIVIDER -->
+
+            <div class="divider">
+
+                <span>
+                    BMJ VOICE AI
+                </span>
+
+            </div>
+
+
+
+            <!-- REGISTER -->
+
+            <div class="register-box">
+
+                <p>
+                    Vous n'avez pas encore de compte ?
+                </p>
+
+
+                <a href="inscription.html">
+
+                    <i
+                        class="fa-solid fa-user-plus"
+                    ></i>
+
+                    Créer un compte gratuitement
+
+                </a>
+
+            </div>
+
+
+
+            <!-- HOME -->
+
+            <div class="back-home">
+
+                <a href="index.html">
+
+                    <i
+                        class="fa-solid fa-arrow-left"
+                    ></i>
+
+                    Retour à l'accueil
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+>
+
+    <i
+        id="toastIcon"
+        class="fa-solid fa-circle-info"
+    ></i>
+
+    <span
+        id="toastMessage"
+    >
+        Message
+    </span>
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+const API_BASE =
+    "https://eseay-correct1.onrender.com";
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+
+const emailInput =
+    document.getElementById(
+        "email"
+    );
+
+
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
+
+
+const rememberInput =
+    document.getElementById(
+        "remember"
+    );
+
+
+const loginBtn =
+    document.getElementById(
+        "loginBtn"
+    );
+
+
+const passwordToggle =
+    document.getElementById(
+        "passwordToggle"
+    );
+
+
+const formMessage =
+    document.getElementById(
+        "formMessage"
+    );
+
+
+const messageIcon =
+    document.getElementById(
+        "messageIcon"
+    );
+
+
+const messageText =
+    document.getElementById(
+        "messageText"
+    );
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    message,
+    type = "info"
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    const icon =
+        document.getElementById(
+            "toastIcon"
+        );
+
+
+    const text =
+        document.getElementById(
+            "toastMessage"
+        );
+
+
+    text.textContent =
+        message;
+
+
+    toast.className =
+        "toast show " + type;
+
+
+    if (
+        type === "success"
+    ) {
+
+        icon.className =
+            "fa-solid fa-circle-check";
+
+    }
+    else if (
+        type === "error"
+    ) {
+
+        icon.className =
+            "fa-solid fa-circle-exclamation";
+
+    }
+    else {
+
+        icon.className =
+            "fa-solid fa-circle-info";
+
+    }
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3500
+        );
+
+}
+
+
+/* =========================================================
+   MESSAGE FORMULAIRE
+========================================================= */
+
+function showFormMessage(
+    message,
+    type = "info"
+) {
+
+    formMessage.className =
+        "form-message show " +
+        type;
+
+
+    messageText.textContent =
+        message;
+
+
+    if (
+        type === "success"
+    ) {
+
+        messageIcon.className =
+            "fa-solid fa-circle-check";
+
+    }
+    else if (
+        type === "error"
+    ) {
+
+        messageIcon.className =
+            "fa-solid fa-circle-exclamation";
+
+    }
+    else {
+
+        messageIcon.className =
+            "fa-solid fa-circle-info";
+
+    }
+
+}
+
+
+function hideFormMessage() {
+
+    formMessage.classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   API REQUEST
+========================================================= */
+
+async function apiRequest(
+    path,
+    options = {}
+) {
+
+    const headers = {
+
+        "Content-Type":
+            "application/json",
+
+        ...(options.headers || {})
+
+    };
+
+
+    const response =
+        await fetch(
+            API_BASE + path,
+            {
+                ...options,
+                headers
+            }
+        );
+
+
+    let data = null;
+
+
+    try {
+
+        data =
+            await response.json();
+
+    }
+    catch {
+
+        data = null;
+
+    }
+
+
+    if (!response.ok) {
+
+        const message =
+            data?.message ||
+            data?.error ||
+            `Erreur serveur (${response.status})`;
+
+
+        const error =
+            new Error(
+                message
+            );
+
+
+        error.status =
+            response.status;
+
+
+        error.data =
+            data;
+
+
+        throw error;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================================
+   AFFICHER / CACHER PASSWORD
+========================================================= */
+
+passwordToggle.addEventListener(
+    "click",
+    () => {
+
+        const icon =
+            passwordToggle.querySelector(
+                "i"
+            );
+
+
+        if (
+            passwordInput.type ===
+            "password"
+        ) {
+
+            passwordInput.type =
+                "text";
+
+
+            icon.className =
+                "fa-regular fa-eye-slash";
+
+
+            passwordToggle.setAttribute(
+                "aria-label",
+                "Masquer le mot de passe"
+            );
+
+        }
+        else {
+
+            passwordInput.type =
+                "password";
+
+
+            icon.className =
+                "fa-regular fa-eye";
+
+
+            passwordToggle.setAttribute(
+                "aria-label",
+                "Afficher le mot de passe"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   VALIDATION EMAIL
+========================================================= */
+
+emailInput.addEventListener(
+    "blur",
+    () => {
+
+        const email =
+            emailInput.value.trim();
+
+
+        if (!email) {
+
+            emailInput.classList.remove(
+                "input-error"
+            );
+
+            return;
+
+        }
+
+
+        const valid =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                .test(email);
+
+
+        emailInput.classList.toggle(
+            "input-error",
+            !valid
+        );
+
+    }
+);
+
+
+/* =========================================================
+   VALIDATION
+========================================================= */
+
+function validateForm() {
+
+    const email =
+        emailInput.value
+            .trim()
+            .toLowerCase();
+
+
+    const password =
+        passwordInput.value;
+
+
+    if (!email) {
+
+        showFormMessage(
+            "Veuillez saisir votre adresse e-mail.",
+            "error"
+        );
+
+
+        emailInput.focus();
+
+        return false;
+
+    }
+
+
+    if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            .test(email)
+    ) {
+
+        showFormMessage(
+            "Veuillez saisir une adresse e-mail valide.",
+            "error"
+        );
+
+
+        emailInput.focus();
+
+        return false;
+
+    }
+
+
+    if (!password) {
+
+        showFormMessage(
+            "Veuillez saisir votre mot de passe.",
+            "error"
+        );
+
+
+        passwordInput.focus();
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   SAUVEGARDER LA SESSION
+========================================================= */
+
+function saveLoginSession(
+    token,
+    user
+) {
+
+    /*
+     * Token principal utilisé par
+     * index.html et les autres pages.
+     */
+
+    localStorage.setItem(
+        "bmj_voice_token",
+        token
+    );
+
+
+    if (user) {
+
+        localStorage.setItem(
+            "bmj_voice_user",
+            JSON.stringify(user)
+        );
+
+    }
+
+
+    /*
+     * Compatibilité avec une éventuelle
+     * ancienne version du frontend.
+     */
+
+    if (user) {
+
+        localStorage.setItem(
+            "bmj_current_user",
+            JSON.stringify(user)
+        );
+
+    }
+
+
+    /*
+     * On mémorise uniquement l'e-mail
+     * si l'utilisateur coche
+     * "Se souvenir de moi".
+     */
+
+    if (
+        rememberInput.checked
+    ) {
+
+        localStorage.setItem(
+            "bmj_voice_remember_email",
+            emailInput.value
+                .trim()
+                .toLowerCase()
+        );
+
+    }
+    else {
+
+        localStorage.removeItem(
+            "bmj_voice_remember_email"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CONNEXION
+========================================================= */
+
+loginForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        hideFormMessage();
+
+
+        if (
+            !validateForm()
+        ) {
+
+            return;
+
+        }
+
+
+        loginBtn.disabled =
+            true;
+
+
+        loginBtn.innerHTML = `
+            <span class="spinner"></span>
+            Connexion...
+        `;
+
+
+        try {
+
+            const email =
+                emailInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const password =
+                passwordInput.value;
+
+
+            const data =
+                await apiRequest(
+                    "/api/auth/login",
+                    {
+                        method: "POST",
+
+                        body:
+                            JSON.stringify({
+
+                                email,
+
+                                password
+
+                            })
+                    }
+                );
+
+
+            console.log(
+                "Réponse connexion:",
+                data
+            );
+
+
+            /*
+             * Le backend BMJ VOICE AI peut
+             * retourner le token directement
+             * ou à l'intérieur de data.
+             */
+
+            const token =
+                data?.token ||
+                data?.access_token ||
+                data?.data?.token;
+
+
+            const user =
+                data?.user ||
+                data?.data?.user ||
+                null;
+
+
+            if (!token) {
+
+                throw new Error(
+                    "Connexion réussie mais le serveur n'a pas retourné de token."
+                );
+
+            }
+
+
+            saveLoginSession(
+                token,
+                user
+            );
+
+
+            showFormMessage(
+                "Connexion réussie. Redirection vers votre espace...",
+                "success"
+            );
+
+
+            showToast(
+                "Connexion réussie.",
+                "success"
+            );
+
+
+            /*
+             * Redirection vers l'accueil
+             * après connexion.
+             */
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "dashboard.html";
+
+                },
+                700
+            );
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Erreur connexion:",
+                error
+            );
+
+
+            let message =
+                error.message ||
+                "Impossible de vous connecter.";
+
+
+            /*
+             * 401 = identifiants incorrects
+             */
+
+            if (
+                error.status === 401
+            ) {
+
+                message =
+                    "Adresse e-mail ou mot de passe incorrect.";
+
+            }
+
+
+            /*
+             * 403 = compte bloqué/inactif
+             */
+
+            else if (
+                error.status === 403
+            ) {
+
+                message =
+                    error.message ||
+                    "Votre compte est actuellement bloqué ou désactivé.";
+
+            }
+
+
+            /*
+             * 404
+             */
+
+            else if (
+                error.status === 404
+            ) {
+
+                message =
+                    "Le service de connexion est momentanément indisponible.";
+
+            }
+
+
+            /*
+             * 429
+             */
+
+            else if (
+                error.status === 429
+            ) {
+
+                message =
+                    "Trop de tentatives. Veuillez patienter quelques instants.";
+
+            }
+
+
+            /*
+             * 500+
+             */
+
+            else if (
+                error.status >= 500
+            ) {
+
+                message =
+                    "Le serveur rencontre actuellement un problème. Réessayez dans quelques instants.";
+
+            }
+
+
+            showFormMessage(
+                message,
+                "error"
+            );
+
+
+            showToast(
+                message,
+                "error"
+            );
+
+        }
+        finally {
+
+            loginBtn.disabled =
+                false;
+
+
+            loginBtn.innerHTML = `
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Se connecter
+            `;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESTAURER EMAIL
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const savedEmail =
+            localStorage.getItem(
+                "bmj_voice_remember_email"
+            );
+
+
+        if (savedEmail) {
+
+            emailInput.value =
+                savedEmail;
+
+
+            rememberInput.checked =
+                true;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NETTOYAGE MESSAGE
+========================================================= */
+
+[
+    emailInput,
+    passwordInput
+]
+.forEach(
+    input => {
+
+        input.addEventListener(
+            "input",
+            () => {
+
+                input.classList.remove(
+                    "input-error"
+                );
+
+
+                if (
+                    formMessage.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    hideFormMessage();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+</html>
