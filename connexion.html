@@ -1730,6 +1730,12 @@
 <script>
 
 "use strict";
+/* =========================================================
+   BMJ VOICE AI
+   SCRIPT DE CONNEXION
+========================================================= */
+
+"use strict";
 
 
 /* =========================================================
@@ -1739,63 +1745,55 @@
 const API_BASE =
     "https://eseay-correct1.onrender.com";
 
+const LOGIN_URL =
+    API_BASE + "/api/auth/login";
+
+const DASHBOARD_URL =
+    "dashboard.html";
+
+const REQUEST_TIMEOUT =
+    30000;
+
 
 /* =========================================================
    DOM
 ========================================================= */
 
 const loginForm =
-    document.getElementById(
-        "loginForm"
-    );
-
+    document.getElementById("loginForm");
 
 const emailInput =
-    document.getElementById(
-        "email"
-    );
-
+    document.getElementById("email");
 
 const passwordInput =
-    document.getElementById(
-        "password"
-    );
-
+    document.getElementById("password");
 
 const rememberInput =
-    document.getElementById(
-        "remember"
-    );
-
+    document.getElementById("remember");
 
 const loginBtn =
-    document.getElementById(
-        "loginBtn"
-    );
-
+    document.getElementById("loginBtn");
 
 const passwordToggle =
-    document.getElementById(
-        "passwordToggle"
-    );
-
+    document.getElementById("passwordToggle");
 
 const formMessage =
-    document.getElementById(
-        "formMessage"
-    );
-
+    document.getElementById("formMessage");
 
 const messageIcon =
-    document.getElementById(
-        "messageIcon"
-    );
-
+    document.getElementById("messageIcon");
 
 const messageText =
-    document.getElementById(
-        "messageText"
-    );
+    document.getElementById("messageText");
+
+const toast =
+    document.getElementById("toast");
+
+const toastIcon =
+    document.getElementById("toastIcon");
+
+const toastMessage =
+    document.getElementById("toastMessage");
 
 
 /* =========================================================
@@ -1810,25 +1808,22 @@ function showToast(
     type = "info"
 ) {
 
-    const toast =
-        document.getElementById(
-            "toast"
+    if (
+        !toast ||
+        !toastIcon ||
+        !toastMessage
+    ) {
+
+        console.log(
+            message
         );
 
+        return;
 
-    const icon =
-        document.getElementById(
-            "toastIcon"
-        );
+    }
 
 
-    const text =
-        document.getElementById(
-            "toastMessage"
-        );
-
-
-    text.textContent =
+    toastMessage.textContent =
         message;
 
 
@@ -1840,21 +1835,32 @@ function showToast(
         type === "success"
     ) {
 
-        icon.className =
+        toastIcon.className =
             "fa-solid fa-circle-check";
 
     }
+
     else if (
         type === "error"
     ) {
 
-        icon.className =
+        toastIcon.className =
             "fa-solid fa-circle-exclamation";
 
     }
+
+    else if (
+        type === "warning"
+    ) {
+
+        toastIcon.className =
+            "fa-solid fa-triangle-exclamation";
+
+    }
+
     else {
 
-        icon.className =
+        toastIcon.className =
             "fa-solid fa-circle-info";
 
     }
@@ -1867,14 +1873,14 @@ function showToast(
 
     toastTimer =
         setTimeout(
-            () => {
+            function () {
 
                 toast.classList.remove(
                     "show"
                 );
 
             },
-            3500
+            4000
         );
 
 }
@@ -1889,9 +1895,19 @@ function showFormMessage(
     type = "info"
 ) {
 
+    if (
+        !formMessage ||
+        !messageIcon ||
+        !messageText
+    ) {
+
+        return;
+
+    }
+
+
     formMessage.className =
-        "form-message show " +
-        type;
+        "form-message show " + type;
 
 
     messageText.textContent =
@@ -1906,6 +1922,7 @@ function showFormMessage(
             "fa-solid fa-circle-check";
 
     }
+
     else if (
         type === "error"
     ) {
@@ -1914,6 +1931,16 @@ function showFormMessage(
             "fa-solid fa-circle-exclamation";
 
     }
+
+    else if (
+        type === "warning"
+    ) {
+
+        messageIcon.className =
+            "fa-solid fa-triangle-exclamation";
+
+    }
+
     else {
 
         messageIcon.className =
@@ -1926,186 +1953,126 @@ function showFormMessage(
 
 function hideFormMessage() {
 
-    formMessage.classList.remove(
-        "show"
+    if (
+        formMessage
+    ) {
+
+        formMessage.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   AFFICHER / CACHER MOT DE PASSE
+========================================================= */
+
+if (
+    passwordToggle &&
+    passwordInput
+) {
+
+    passwordToggle.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const icon =
+                passwordToggle.querySelector(
+                    "i"
+                );
+
+
+            if (
+                passwordInput.type ===
+                "password"
+            ) {
+
+                passwordInput.type =
+                    "text";
+
+
+                if (icon) {
+
+                    icon.className =
+                        "fa-regular fa-eye-slash";
+
+                }
+
+
+                passwordToggle.setAttribute(
+                    "aria-label",
+                    "Masquer le mot de passe"
+                );
+
+            }
+
+            else {
+
+                passwordInput.type =
+                    "password";
+
+
+                if (icon) {
+
+                    icon.className =
+                        "fa-regular fa-eye";
+
+                }
+
+
+                passwordToggle.setAttribute(
+                    "aria-label",
+                    "Afficher le mot de passe"
+                );
+
+            }
+
+        }
     );
 
 }
 
 
 /* =========================================================
-   API REQUEST
+   VALIDATION EMAIL
 ========================================================= */
 
-async function apiRequest(
-    path,
-    options = {}
+function isValidEmail(
+    email
 ) {
 
-    const headers = {
-
-        "Content-Type":
-            "application/json",
-
-        ...(options.headers || {})
-
-    };
-
-
-    const response =
-        await fetch(
-            API_BASE + path,
-            {
-                ...options,
-                headers
-            }
-        );
-
-
-    let data = null;
-
-
-    try {
-
-        data =
-            await response.json();
-
-    }
-    catch {
-
-        data = null;
-
-    }
-
-
-    if (!response.ok) {
-
-        const message =
-            data?.message ||
-            data?.error ||
-            `Erreur serveur (${response.status})`;
-
-
-        const error =
-            new Error(
-                message
-            );
-
-
-        error.status =
-            response.status;
-
-
-        error.data =
-            data;
-
-
-        throw error;
-
-    }
-
-
-    return data;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
 
 }
 
 
 /* =========================================================
-   AFFICHER / CACHER PASSWORD
-========================================================= */
-
-passwordToggle.addEventListener(
-    "click",
-    () => {
-
-        const icon =
-            passwordToggle.querySelector(
-                "i"
-            );
-
-
-        if (
-            passwordInput.type ===
-            "password"
-        ) {
-
-            passwordInput.type =
-                "text";
-
-
-            icon.className =
-                "fa-regular fa-eye-slash";
-
-
-            passwordToggle.setAttribute(
-                "aria-label",
-                "Masquer le mot de passe"
-            );
-
-        }
-        else {
-
-            passwordInput.type =
-                "password";
-
-
-            icon.className =
-                "fa-regular fa-eye";
-
-
-            passwordToggle.setAttribute(
-                "aria-label",
-                "Afficher le mot de passe"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   VALIDATION EMAIL
-========================================================= */
-
-emailInput.addEventListener(
-    "blur",
-    () => {
-
-        const email =
-            emailInput.value.trim();
-
-
-        if (!email) {
-
-            emailInput.classList.remove(
-                "input-error"
-            );
-
-            return;
-
-        }
-
-
-        const valid =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                .test(email);
-
-
-        emailInput.classList.toggle(
-            "input-error",
-            !valid
-        );
-
-    }
-);
-
-
-/* =========================================================
-   VALIDATION
+   VALIDATION FORMULAIRE
 ========================================================= */
 
 function validateForm() {
+
+    if (
+        !emailInput ||
+        !passwordInput
+    ) {
+
+        showFormMessage(
+            "Le formulaire de connexion est incomplet.",
+            "error"
+        );
+
+        return false;
+
+    }
+
 
     const email =
         emailInput.value
@@ -2117,6 +2084,10 @@ function validateForm() {
         passwordInput.value;
 
 
+    emailInput.value =
+        email;
+
+
     if (!email) {
 
         showFormMessage(
@@ -2125,7 +2096,13 @@ function validateForm() {
         );
 
 
+        emailInput.classList.add(
+            "input-error"
+        );
+
+
         emailInput.focus();
+
 
         return false;
 
@@ -2133,8 +2110,9 @@ function validateForm() {
 
 
     if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-            .test(email)
+        !isValidEmail(
+            email
+        )
     ) {
 
         showFormMessage(
@@ -2143,7 +2121,13 @@ function validateForm() {
         );
 
 
+        emailInput.classList.add(
+            "input-error"
+        );
+
+
         emailInput.focus();
+
 
         return false;
 
@@ -2158,7 +2142,13 @@ function validateForm() {
         );
 
 
+        passwordInput.classList.add(
+            "input-error"
+        );
+
+
         passwordInput.focus();
+
 
         return false;
 
@@ -2171,18 +2161,51 @@ function validateForm() {
 
 
 /* =========================================================
+   NETTOYER LES ANCIENNES DONNÉES
+========================================================= */
+
+function clearOldSession() {
+
+    localStorage.removeItem(
+        "bmj_voice_token"
+    );
+
+
+    localStorage.removeItem(
+        "bmj_voice_user"
+    );
+
+
+    localStorage.removeItem(
+        "bmj_current_user"
+    );
+
+}
+
+
+/* =========================================================
    SAUVEGARDER LA SESSION
 ========================================================= */
 
-function saveLoginSession(
+function saveSession(
     token,
     user
 ) {
 
-    /*
-     * Token principal utilisé par
-     * index.html et les autres pages.
-     */
+    if (
+        !token
+    ) {
+
+        throw new Error(
+            "Le serveur n'a pas fourni de token de connexion."
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       TOKEN
+    --------------------------------------------------------- */
 
     localStorage.setItem(
         "bmj_voice_token",
@@ -2190,54 +2213,517 @@ function saveLoginSession(
     );
 
 
-    if (user) {
+    /* ---------------------------------------------------------
+       UTILISATEUR
+    --------------------------------------------------------- */
+
+    if (
+        user
+    ) {
+
+        const userData =
+            JSON.stringify(
+                user
+            );
+
 
         localStorage.setItem(
             "bmj_voice_user",
-            JSON.stringify(user)
+            userData
         );
 
-    }
 
-
-    /*
-     * Compatibilité avec une éventuelle
-     * ancienne version du frontend.
-     */
-
-    if (user) {
+        /*
+         * Compatibilité avec les anciennes pages BMJ.
+         */
 
         localStorage.setItem(
             "bmj_current_user",
-            JSON.stringify(user)
+            userData
         );
 
     }
 
 
-    /*
-     * On mémorise uniquement l'e-mail
-     * si l'utilisateur coche
-     * "Se souvenir de moi".
-     */
+    /* ---------------------------------------------------------
+       E-MAIL À RETENIR
+    --------------------------------------------------------- */
 
     if (
+        rememberInput &&
         rememberInput.checked
     ) {
 
-        localStorage.setItem(
-            "bmj_voice_remember_email",
+        const email =
             emailInput.value
                 .trim()
-                .toLowerCase()
+                .toLowerCase();
+
+
+        localStorage.setItem(
+            "bmj_voice_remember_email",
+            email
         );
 
     }
+
     else {
 
         localStorage.removeItem(
             "bmj_voice_remember_email"
         );
+
+    }
+
+
+    /*
+     * Vérification locale.
+     */
+
+    const savedToken =
+        localStorage.getItem(
+            "bmj_voice_token"
+        );
+
+
+    if (
+        !savedToken
+    ) {
+
+        throw new Error(
+            "Impossible d'enregistrer la session."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRAIRE LE TOKEN
+========================================================= */
+
+function getTokenFromResponse(
+    data
+) {
+
+    if (
+        !data
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+     * Format 1
+     *
+     * {
+     *   token: "..."
+     * }
+     */
+
+    if (
+        typeof data.token ===
+        "string" &&
+        data.token.trim()
+    ) {
+
+        return data.token.trim();
+
+    }
+
+
+    /*
+     * Format 2
+     *
+     * {
+     *   access_token: "..."
+     * }
+     */
+
+    if (
+        typeof data.access_token ===
+        "string" &&
+        data.access_token.trim()
+    ) {
+
+        return data.access_token.trim();
+
+    }
+
+
+    /*
+     * Format 3
+     *
+     * {
+     *   data: {
+     *      token: "..."
+     *   }
+     * }
+     */
+
+    if (
+        typeof data.data?.token ===
+        "string" &&
+        data.data.token.trim()
+    ) {
+
+        return data.data.token.trim();
+
+    }
+
+
+    /*
+     * Format 4
+     *
+     * {
+     *   data: {
+     *      access_token: "..."
+     *   }
+     * }
+     */
+
+    if (
+        typeof data.data?.access_token ===
+        "string" &&
+        data.data.access_token.trim()
+    ) {
+
+        return data.data.access_token.trim();
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   EXTRAIRE L'UTILISATEUR
+========================================================= */
+
+function getUserFromResponse(
+    data
+) {
+
+    if (
+        !data
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        data.user
+    ) {
+
+        return data.user;
+
+    }
+
+
+    if (
+        data.data?.user
+    ) {
+
+        return data.data.user;
+
+    }
+
+
+    if (
+        data.account
+    ) {
+
+        return data.account;
+
+    }
+
+
+    if (
+        data.data?.account
+    ) {
+
+        return data.data.account;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   REQUÊTE API
+========================================================= */
+
+async function apiRequest(
+    url,
+    options = {}
+) {
+
+    const controller =
+        new AbortController();
+
+
+    const timeout =
+        setTimeout(
+            function () {
+
+                controller.abort();
+
+            },
+            REQUEST_TIMEOUT
+        );
+
+
+    try {
+
+        const headers = {
+
+            "Content-Type":
+                "application/json",
+
+            "Accept":
+                "application/json",
+
+            ...(options.headers || {})
+
+        };
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    ...options,
+                    headers,
+                    signal:
+                        controller.signal
+                }
+            );
+
+
+        let data =
+            null;
+
+
+        const contentType =
+            response.headers.get(
+                "content-type"
+            );
+
+
+        if (
+            contentType &&
+            contentType.includes(
+                "application/json"
+            )
+        ) {
+
+            try {
+
+                data =
+                    await response.json();
+
+            }
+
+            catch {
+
+                data =
+                    null;
+
+            }
+
+        }
+
+        else {
+
+            try {
+
+                const text =
+                    await response.text();
+
+
+                if (
+                    text
+                ) {
+
+                    data = {
+
+                        message:
+                            text
+
+                    };
+
+                }
+
+            }
+
+            catch {
+
+                data =
+                    null;
+
+            }
+
+        }
+
+
+        if (
+            !response.ok
+        ) {
+
+            const message =
+                data?.message ||
+                data?.error ||
+                data?.detail ||
+                `Erreur serveur (${response.status})`;
+
+
+            const error =
+                new Error(
+                    message
+                );
+
+
+            error.status =
+                response.status;
+
+
+            error.data =
+                data;
+
+
+            throw error;
+
+        }
+
+
+        return data;
+
+    }
+
+    catch (error) {
+
+        if (
+            error.name ===
+            "AbortError"
+        ) {
+
+            const timeoutError =
+                new Error(
+                    "Le serveur met trop de temps à répondre."
+                );
+
+
+            timeoutError.code =
+                "TIMEOUT";
+
+
+            throw timeoutError;
+
+        }
+
+
+        /*
+         * Erreur réseau.
+         */
+
+        if (
+            error instanceof
+            TypeError
+        ) {
+
+            const networkError =
+                new Error(
+                    "Impossible de contacter le serveur BMJ VOICE AI."
+                );
+
+
+            networkError.code =
+                "NETWORK";
+
+
+            throw networkError;
+
+        }
+
+
+        throw error;
+
+    }
+
+    finally {
+
+        clearTimeout(
+            timeout
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ÉTAT DU BOUTON
+========================================================= */
+
+function setLoading(
+    loading
+) {
+
+    if (
+        !loginBtn
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        loading
+    ) {
+
+        loginBtn.disabled =
+            true;
+
+
+        loginBtn.setAttribute(
+            "aria-busy",
+            "true"
+        );
+
+
+        loginBtn.innerHTML = `
+            <span class="spinner"></span>
+            Connexion...
+        `;
+
+    }
+
+    else {
+
+        loginBtn.disabled =
+            false;
+
+
+        loginBtn.removeAttribute(
+            "aria-busy"
+        );
+
+
+        loginBtn.innerHTML = `
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Se connecter
+        `;
 
     }
 
@@ -2248,36 +2734,33 @@ function saveLoginSession(
    CONNEXION
 ========================================================= */
 
-loginForm.addEventListener(
-    "submit",
-    async event => {
+if (
+    loginForm
+) {
 
-        event.preventDefault();
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
 
-
-        hideFormMessage();
-
-
-        if (
-            !validateForm()
-        ) {
-
-            return;
-
-        }
+            event.preventDefault();
 
 
-        loginBtn.disabled =
-            true;
+            hideFormMessage();
 
 
-        loginBtn.innerHTML = `
-            <span class="spinner"></span>
-            Connexion...
-        `;
+            if (
+                !validateForm()
+            ) {
+
+                return;
+
+            }
 
 
-        try {
+            setLoading(
+                true
+            );
+
 
             const email =
                 emailInput.value
@@ -2289,224 +2772,434 @@ loginForm.addEventListener(
                 passwordInput.value;
 
 
-            const data =
-                await apiRequest(
-                    "/api/auth/login",
-                    {
-                        method: "POST",
+            try {
 
-                        body:
-                            JSON.stringify({
+                /*
+                 * Supprimer l'ancien token avant
+                 * d'effectuer une nouvelle connexion.
+                 */
 
-                                email,
+                clearOldSession();
 
-                                password
 
-                            })
-                    }
+                showFormMessage(
+                    "Connexion au serveur BMJ VOICE AI...",
+                    "info"
                 );
 
 
-            console.log(
-                "Réponse connexion:",
-                data
-            );
+                /*
+                 * APPEL :
+                 *
+                 * POST /api/auth/login
+                 */
+
+                const data =
+                    await apiRequest(
+                        LOGIN_URL,
+                        {
+                            method:
+                                "POST",
+
+                            body:
+                                JSON.stringify({
+
+                                    email:
+                                        email,
+
+                                    password:
+                                        password
+
+                                })
+                        }
+                    );
 
 
-            /*
-             * Le backend BMJ VOICE AI peut
-             * retourner le token directement
-             * ou à l'intérieur de data.
-             */
-
-            const token =
-                data?.token ||
-                data?.access_token ||
-                data?.data?.token;
+                console.log(
+                    "Réponse login BMJ VOICE AI :",
+                    data
+                );
 
 
-            const user =
-                data?.user ||
-                data?.data?.user ||
-                null;
+                /*
+                 * TOKEN
+                 */
+
+                const token =
+                    getTokenFromResponse(
+                        data
+                    );
 
 
-            if (!token) {
+                /*
+                 * UTILISATEUR
+                 */
 
-                throw new Error(
-                    "Connexion réussie mais le serveur n'a pas retourné de token."
+                let user =
+                    getUserFromResponse(
+                        data
+                    );
+
+
+                /*
+                 * Si le serveur ne renvoie pas
+                 * l'utilisateur, on crée au minimum
+                 * un objet compatible.
+                 */
+
+                if (
+                    !user
+                ) {
+
+                    user = {
+
+                        email:
+                            email
+
+                    };
+
+                }
+
+                else {
+
+                    user = {
+
+                        ...user,
+
+                        email:
+                            user.email ||
+                            email
+
+                    };
+
+                }
+
+
+                /*
+                 * Vérification du token.
+                 */
+
+                if (
+                    !token
+                ) {
+
+                    console.error(
+                        "Réponse complète du serveur :",
+                        data
+                    );
+
+
+                    throw new Error(
+                        "La connexion a été acceptée, mais aucun token n'a été reçu."
+                    );
+
+                }
+
+
+                /*
+                 * SAUVEGARDER
+                 */
+
+                saveSession(
+                    token,
+                    user
+                );
+
+
+                /*
+                 * SUCCÈS
+                 */
+
+                showFormMessage(
+                    "Connexion réussie. Redirection vers votre espace...",
+                    "success"
+                );
+
+
+                showToast(
+                    "Connexion réussie.",
+                    "success"
+                );
+
+
+                /*
+                 * IMPORTANT :
+                 *
+                 * Ne pas appeler /api/auth/me ici.
+                 *
+                 * Le dashboard effectuera lui-même
+                 * les vérifications nécessaires.
+                 */
+
+                setTimeout(
+                    function () {
+
+                        window.location.replace(
+                            DASHBOARD_URL
+                        );
+
+                    },
+                    700
                 );
 
             }
 
+            catch (error) {
 
-            saveLoginSession(
-                token,
-                user
-            );
-
-
-            showFormMessage(
-                "Connexion réussie. Redirection vers votre espace...",
-                "success"
-            );
+                console.error(
+                    "Erreur de connexion BMJ VOICE AI :",
+                    error
+                );
 
 
-            showToast(
-                "Connexion réussie.",
-                "success"
-            );
+                let message =
+                    "Impossible de vous connecter.";
 
 
-            /*
-             * Redirection vers l'accueil
-             * après connexion.
-             */
+                /* -------------------------------------------------
+                   TIMEOUT
+                ------------------------------------------------- */
 
-            setTimeout(
-                () => {
+                if (
+                    error.code ===
+                    "TIMEOUT"
+                ) {
 
-                    window.location.href =
-                        "dashboard.html";
+                    message =
+                        "Le serveur met trop de temps à répondre. Render est peut-être en train de se réveiller. Réessayez dans quelques secondes.";
 
-                },
-                700
-            );
+                }
 
+
+                /* -------------------------------------------------
+                   ERREUR RÉSEAU
+                ------------------------------------------------- */
+
+                else if (
+                    error.code ===
+                    "NETWORK"
+                ) {
+
+                    message =
+                        "Impossible de contacter le serveur. Vérifiez votre connexion Internet.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   400
+                ------------------------------------------------- */
+
+                else if (
+                    error.status ===
+                    400
+                ) {
+
+                    message =
+                        error.message ||
+                        "Les informations envoyées sont invalides.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   401
+                ------------------------------------------------- */
+
+                else if (
+                    error.status ===
+                    401
+                ) {
+
+                    message =
+                        "Adresse e-mail ou mot de passe incorrect.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   403
+                ------------------------------------------------- */
+
+                else if (
+                    error.status ===
+                    403
+                ) {
+
+                    message =
+                        error.message ||
+                        "Votre compte est bloqué ou désactivé.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   404
+                ------------------------------------------------- */
+
+                else if (
+                    error.status ===
+                    404
+                ) {
+
+                    message =
+                        "La route de connexion est introuvable sur le serveur BMJ VOICE AI.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   409
+                ------------------------------------------------- */
+
+                else if (
+                    error.status ===
+                    409
+                ) {
+
+                    message =
+                        error.message ||
+                        "Ce compte existe déjà.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   429
+                ------------------------------------------------- */
+
+                else if (
+                    error.status ===
+                    429
+                ) {
+
+                    message =
+                        "Trop de tentatives de connexion. Veuillez patienter quelques instants.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   500+
+                ------------------------------------------------- */
+
+                else if (
+                    error.status >=
+                    500
+                ) {
+
+                    message =
+                        "Le serveur BMJ VOICE AI rencontre actuellement un problème. Réessayez dans quelques instants.";
+
+                }
+
+
+                /* -------------------------------------------------
+                   MESSAGE SERVEUR
+                ------------------------------------------------- */
+
+                else if (
+                    error.message
+                ) {
+
+                    message =
+                        error.message;
+
+                }
+
+
+                showFormMessage(
+                    message,
+                    "error"
+                );
+
+
+                showToast(
+                    message,
+                    "error"
+                );
+
+
+                /*
+                 * Le mot de passe n'est jamais sauvegardé.
+                 */
+
+                if (
+                    passwordInput
+                ) {
+
+                    passwordInput.focus();
+
+                }
+
+            }
+
+            finally {
+
+                /*
+                 * Si aucun token n'a été enregistré,
+                 * on réactive le bouton.
+                 *
+                 * Si la connexion est réussie,
+                 * la page sera redirigée.
+                 */
+
+                const token =
+                    localStorage.getItem(
+                        "bmj_voice_token"
+                    );
+
+
+                if (
+                    !token
+                ) {
+
+                    setLoading(
+                        false
+                    );
+
+                }
+
+            }
 
         }
-        catch (error) {
+    );
 
-            console.error(
-                "Erreur connexion:",
-                error
-            );
-
-
-            let message =
-                error.message ||
-                "Impossible de vous connecter.";
-
-
-            /*
-             * 401 = identifiants incorrects
-             */
-
-            if (
-                error.status === 401
-            ) {
-
-                message =
-                    "Adresse e-mail ou mot de passe incorrect.";
-
-            }
-
-
-            /*
-             * 403 = compte bloqué/inactif
-             */
-
-            else if (
-                error.status === 403
-            ) {
-
-                message =
-                    error.message ||
-                    "Votre compte est actuellement bloqué ou désactivé.";
-
-            }
-
-
-            /*
-             * 404
-             */
-
-            else if (
-                error.status === 404
-            ) {
-
-                message =
-                    "Le service de connexion est momentanément indisponible.";
-
-            }
-
-
-            /*
-             * 429
-             */
-
-            else if (
-                error.status === 429
-            ) {
-
-                message =
-                    "Trop de tentatives. Veuillez patienter quelques instants.";
-
-            }
-
-
-            /*
-             * 500+
-             */
-
-            else if (
-                error.status >= 500
-            ) {
-
-                message =
-                    "Le serveur rencontre actuellement un problème. Réessayez dans quelques instants.";
-
-            }
-
-
-            showFormMessage(
-                message,
-                "error"
-            );
-
-
-            showToast(
-                message,
-                "error"
-            );
-
-        }
-        finally {
-
-            loginBtn.disabled =
-                false;
-
-
-            loginBtn.innerHTML = `
-                <i class="fa-solid fa-right-to-bracket"></i>
-                Se connecter
-            `;
-
-        }
-
-    }
-);
+}
 
 
 /* =========================================================
-   RESTAURER EMAIL
+   RESTAURER L'E-MAIL MÉMORISÉ
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+function restoreRememberedEmail() {
 
-        const savedEmail =
-            localStorage.getItem(
-                "bmj_voice_remember_email"
-            );
+    if (
+        !emailInput
+    ) {
+
+        return;
+
+    }
 
 
-        if (savedEmail) {
+    const savedEmail =
+        localStorage.getItem(
+            "bmj_voice_remember_email"
+        );
 
-            emailInput.value =
-                savedEmail;
 
+    if (
+        savedEmail
+    ) {
+
+        emailInput.value =
+            savedEmail;
+
+
+        if (
+            rememberInput
+        ) {
 
             rememberInput.checked =
                 true;
@@ -2514,41 +3207,118 @@ document.addEventListener(
         }
 
     }
-);
+
+}
 
 
 /* =========================================================
-   NETTOYAGE MESSAGE
+   NETTOYAGE DES ERREURS DES INPUTS
 ========================================================= */
 
-[
-    emailInput,
-    passwordInput
-]
-.forEach(
-    input => {
+function setupInputListeners() {
 
-        input.addEventListener(
-            "input",
-            () => {
+    const inputs = [
 
-                input.classList.remove(
-                    "input-error"
-                );
+        emailInput,
+
+        passwordInput
+
+    ];
 
 
-                if (
-                    formMessage.classList.contains(
-                        "show"
-                    )
-                ) {
+    inputs.forEach(
+        function (input) {
 
-                    hideFormMessage();
+            if (
+                !input
+            ) {
 
-                }
+                return;
 
             }
+
+
+            input.addEventListener(
+                "input",
+                function () {
+
+                    input.classList.remove(
+                        "input-error"
+                    );
+
+
+                    if (
+                        formMessage &&
+                        formMessage.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        hideFormMessage();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        restoreRememberedEmail();
+
+        setupInputListeners();
+
+
+        /*
+         * Afficher dans la console l'API utilisée.
+         */
+
+        console.log(
+            "=================================================="
         );
+
+        console.log(
+            "BMJ VOICE AI — CONNEXION"
+        );
+
+        console.log(
+            "API :",
+            API_BASE
+        );
+
+        console.log(
+            "Login :",
+            LOGIN_URL
+        );
+
+        console.log(
+            "=================================================="
+        );
+
+
+        /*
+         * Focus automatique.
+         */
+
+        if (
+            emailInput &&
+            !emailInput.value
+        ) {
+
+            emailInput.focus();
+
+        }
 
     }
 );
